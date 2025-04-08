@@ -1,12 +1,175 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from 'react';
+import Navbar from '@/components/Navbar';
+import FeaturedSection from '@/components/FeaturedSection';
+import CategorySection from '@/components/CategorySection';
+import RatingCircle from '@/components/RatingCircle';
+import { Button } from '@/components/ui/button';
+import { Search } from 'lucide-react';
+import { featuredProducts, featuredMovies, productCategories, movieCategories } from '@/data/mockData';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      
+      {/* Hero Section */}
+      <section className="bg-gradient-to-r from-purple-900 via-purple-800 to-purple-900 text-white py-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4">
+            Compare. Review. Decide.
+          </h1>
+          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto">
+            SmartPickr aggregates reviews and prices from across the web, helping you make the best purchase decisions.
+          </p>
+          
+          <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
+            <Button className="bg-white text-purple-800 hover:bg-gray-100">
+              Browse Products
+            </Button>
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-purple-800">
+              Explore Movies
+            </Button>
+          </div>
+          
+          <div className="mt-10 grid grid-cols-3 md:grid-cols-6 gap-6 max-w-3xl mx-auto">
+            {['Amazon', 'Walmart', 'Best Buy', 'IMDb', 'Rotten Tomatoes', 'Metacritic'].map((source) => (
+              <div key={source} className="flex flex-col items-center">
+                <div className="bg-white/20 w-16 h-16 rounded-full flex items-center justify-center mb-2">
+                  <span className="text-xs">{source}</span>
+                </div>
+                <span className="text-xs font-medium">{source}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      
+      {/* Featured Products Section */}
+      <FeaturedSection 
+        title="Top Products" 
+        subtitle="Highest-rated products across all categories"
+        viewAllLink="/category/all-products"
+        items={featuredProducts}
+        type="product"
+      />
+      
+      {/* Product Categories */}
+      <CategorySection 
+        title="Product Categories" 
+        categories={productCategories}
+      />
+      
+      {/* Featured Movies Section */}
+      <FeaturedSection 
+        title="Top Movies" 
+        subtitle="Latest and highest-rated movies"
+        viewAllLink="/category/movies"
+        items={featuredMovies}
+        type="movie"
+      />
+      
+      {/* Movie Categories */}
+      <CategorySection 
+        title="Movie Categories" 
+        categories={movieCategories}
+      />
+      
+      {/* How It Works Section */}
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">How SmartPickr Works</h2>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">1</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Aggregate Reviews</h3>
+              <p className="text-muted-foreground">We collect reviews and ratings from multiple trusted sources across the web.</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">2</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Compare Prices</h3>
+              <p className="text-muted-foreground">Get real-time price comparisons from major retailers to find the best deals.</p>
+            </div>
+            
+            <div className="text-center">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl font-bold text-primary">3</span>
+              </div>
+              <h3 className="text-xl font-semibold mb-2">Make Smart Choices</h3>
+              <p className="text-muted-foreground">Use our analysis and summaries to make informed purchase decisions quickly.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      {/* Newsletter Section */}
+      <section className="py-16 bg-secondary">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl font-bold mb-4">Stay Updated</h2>
+          <p className="mb-8 max-w-md mx-auto">Get the latest product reviews, price drops, and movie releases delivered to your inbox.</p>
+          
+          <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
+            <input 
+              type="email"
+              placeholder="Your email address"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+            <Button>Subscribe</Button>
+          </div>
+        </div>
+      </section>
+      
+      {/* Footer */}
+      <footer className="bg-navy text-white py-10">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-xl font-bold mb-4">SmartPickr</h3>
+              <p className="text-gray-300">Your trusted source for product and movie reviews, comparisons, and real-time prices.</p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Products</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-300 hover:text-white">Electronics</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Home Appliances</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Fashion</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Beauty</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Movies</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-300 hover:text-white">Action</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Comedy</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Drama</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Sci-Fi</a></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Contact</h4>
+              <ul className="space-y-2">
+                <li><a href="#" className="text-gray-300 hover:text-white">About Us</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Privacy Policy</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Terms of Service</a></li>
+                <li><a href="#" className="text-gray-300 hover:text-white">Contact Us</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2025 SmartPickr. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
