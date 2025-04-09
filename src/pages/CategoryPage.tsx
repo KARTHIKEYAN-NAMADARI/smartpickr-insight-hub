@@ -6,9 +6,14 @@ import ProductCard from '@/components/ProductCard';
 import MovieCard from '@/components/MovieCard';
 import { featuredProducts, featuredMovies, productCategories, movieCategories } from '@/data/mockData';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/components/ui/use-toast';
 
 const CategoryPage = () => {
   const { id } = useParams();
+  const { toast } = useToast();
   
   // Determine if we're showing products or movies based on the category ID
   const isMovie = id === 'movies' || movieCategories.some(cat => cat.id === id);
@@ -23,42 +28,68 @@ const CategoryPage = () => {
       : productCategories.find(cat => cat.id === id);
   
   // Items to display based on category
-  // In a real app, we would fetch based on the category ID
   const items = isMovie ? featuredMovies : featuredProducts;
+
+  // E-commerce platforms for filtering
+  const ecommercePlatforms = [
+    'Amazon', 'Flipkart', 'Snapdeal', 'Etsy', 'Myntra', 
+    'ShopClues', 'eBay', 'Tata Cliq', 'Wix', 'Meesho',
+    'Nykaa', 'Shopify', 'Walmart', 'AJIO', 'Alibaba',
+    'Beyond', 'Paytm Mall', 'AliExpress', 'Amazon India', 
+    'Bonanza', 'FirstCry', 'Jabong.com'
+  ];
+
+  // Movie platforms for filtering
+  const moviePlatforms = [
+    'IMDb', 'Rotten Tomatoes', 'Metacritic', 'Fandango', 
+    'BookMyShow', 'PVR Cinemas', 'INOX', 'AMC Theatres'
+  ];
+
+  const handleRefreshData = () => {
+    toast({
+      title: "Data Refresh",
+      description: "Fetching latest data from all platforms. This would connect to backend APIs in a production environment.",
+    });
+  };
   
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">{category?.name || 'Category'}</h1>
-          <p className="text-muted-foreground">
-            {category?.count || 0} {isMovie ? 'movies' : 'products'} found
-          </p>
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold mb-2">{category?.name || 'Category'}</h1>
+            <p className="text-muted-foreground">
+              {category?.count || 0} {isMovie ? 'movies' : 'products'} found
+            </p>
+          </div>
+          <Button onClick={handleRefreshData} className="bg-purple-600 hover:bg-purple-700">
+            Refresh Data
+          </Button>
         </div>
         
         <div className="flex flex-col md:flex-row gap-6">
           {/* Filters Sidebar */}
-          <aside className="w-full md:w-64 bg-card rounded-lg p-4 h-fit">
+          <aside className="w-full md:w-72 bg-card rounded-lg p-4 h-fit">
             <h3 className="font-semibold mb-4">Filters</h3>
             
             <div className="space-y-6">
               <div>
                 <h4 className="text-sm font-medium mb-2">Rating</h4>
                 <div className="space-y-1">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                    <span>4+ Stars</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                    <span>3+ Stars</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                    <span>2+ Stars</span>
-                  </label>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="rating4" />
+                    <Label htmlFor="rating4">4+ Stars</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="rating3" />
+                    <Label htmlFor="rating3">3+ Stars</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="rating2" />
+                    <Label htmlFor="rating2">2+ Stars</Label>
+                  </div>
                 </div>
               </div>
               
@@ -66,58 +97,46 @@ const CategoryPage = () => {
                 <div>
                   <h4 className="text-sm font-medium mb-2">Price Range</h4>
                   <div className="space-y-1">
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                      <span>Under $100</span>
-                    </label>
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                      <span>$100 - $300</span>
-                    </label>
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                      <span>$300 - $500</span>
-                    </label>
-                    <label className="flex items-center gap-2">
-                      <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                      <span>$500+</span>
-                    </label>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="price1" />
+                      <Label htmlFor="price1">Under $100</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="price2" />
+                      <Label htmlFor="price2">$100 - $300</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="price3" />
+                      <Label htmlFor="price3">$300 - $500</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox id="price4" />
+                      <Label htmlFor="price4">$500+</Label>
+                    </div>
                   </div>
                 </div>
               )}
               
               <div>
                 <h4 className="text-sm font-medium mb-2">Sources</h4>
-                <div className="space-y-1">
+                <div className="space-y-1 max-h-60 overflow-y-auto pr-2">
                   {isMovie ? (
                     <>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>IMDb</span>
-                      </label>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>Rotten Tomatoes</span>
-                      </label>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>Metacritic</span>
-                      </label>
+                      {moviePlatforms.map((platform) => (
+                        <div key={platform} className="flex items-center space-x-2">
+                          <Checkbox id={`platform-${platform}`} />
+                          <Label htmlFor={`platform-${platform}`}>{platform}</Label>
+                        </div>
+                      ))}
                     </>
                   ) : (
                     <>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>Amazon</span>
-                      </label>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>Best Buy</span>
-                      </label>
-                      <label className="flex items-center gap-2">
-                        <input type="checkbox" className="h-4 w-4 rounded border-gray-300" />
-                        <span>Walmart</span>
-                      </label>
+                      {ecommercePlatforms.map((platform) => (
+                        <div key={platform} className="flex items-center space-x-2">
+                          <Checkbox id={`platform-${platform}`} />
+                          <Label htmlFor={`platform-${platform}`}>{platform}</Label>
+                        </div>
+                      ))}
                     </>
                   )}
                 </div>
@@ -132,20 +151,37 @@ const CategoryPage = () => {
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center gap-2">
                 <span className="text-sm">Sort by:</span>
-                <select className="border rounded p-1 text-sm">
-                  <option>Most Popular</option>
-                  <option>Highest Rated</option>
-                  <option>Newest</option>
-                  {!isMovie && <option>Price: Low to High</option>}
-                  {!isMovie && <option>Price: High to Low</option>}
-                </select>
+                <Select defaultValue="popular">
+                  <SelectTrigger className="w-[180px]">
+                    <SelectValue placeholder="Sort by" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="popular">Most Popular</SelectItem>
+                    <SelectItem value="rating">Highest Rated</SelectItem>
+                    <SelectItem value="newest">Newest</SelectItem>
+                    {!isMovie && <SelectItem value="price-low">Price: Low to High</SelectItem>}
+                    {!isMovie && <SelectItem value="price-high">Price: High to Low</SelectItem>}
+                  </SelectContent>
+                </Select>
               </div>
               
               <div className="flex items-center gap-2">
                 <span className="text-sm">View:</span>
-                <button className="p-1 rounded bg-muted">Grid</button>
-                <button className="p-1 rounded">List</button>
+                <div className="flex border rounded-md overflow-hidden">
+                  <button className="p-1 px-2 bg-muted">Grid</button>
+                  <button className="p-1 px-2">List</button>
+                </div>
               </div>
+            </div>
+            
+            {/* Real-time data notice */}
+            <div className="bg-purple-50 border border-purple-200 rounded-md p-4 mb-6">
+              <h3 className="font-medium text-purple-800 mb-2">Real-time Data Integration</h3>
+              <p className="text-sm text-purple-700">
+                In a production environment, this page would display real-time data from 
+                {isMovie ? ' movie theaters and review sites' : ' all selected e-commerce platforms'}.
+                Data would update automatically to show the latest prices, availability, and reviews.
+              </p>
             </div>
             
             {/* Grid View */}
