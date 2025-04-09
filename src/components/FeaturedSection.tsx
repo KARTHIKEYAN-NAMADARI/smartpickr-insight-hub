@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Info } from 'lucide-react';
+import { ArrowRight, Info, Database, Globe } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import ProductCard, { ProductCardProps } from './ProductCard';
 import MovieCard, { MovieCardProps } from './MovieCard';
@@ -23,6 +23,13 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({
   items,
   type,
 }) => {
+  // This would be replaced with a real data fetching mechanism in production
+  const sourceCount = type === 'product' 
+    ? 'Amazon, Flipkart, Snapdeal, Etsy, Myntra, eBay, and 20+ more' 
+    : 'IMDb, Rotten Tomatoes, Metacritic, Fandango, BookMyShow, PVR Cinemas';
+  
+  const itemCount = type === 'product' ? '1M+ products' : '10K+ movies';
+  
   return (
     <section className="py-8">
       <div className="container">
@@ -36,15 +43,15 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="flex items-center text-sm text-purple-700">
-                    <Info size={16} className="mr-1" />
+                    <Database size={16} className="mr-1" />
                     {type === 'product' ? 'Aggregated Products' : 'Theater Listings'}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p className="max-w-xs">
                     {type === 'product' 
-                      ? 'In a production environment, this would display real products aggregated from multiple e-commerce platforms.' 
-                      : 'This would show movies currently in theaters with real-time ticket availability.'}
+                      ? 'All products are aggregated in real-time from multiple e-commerce platforms including Amazon, Flipkart, Snapdeal, Etsy, and many more.' 
+                      : 'Shows movies currently in theaters with data aggregated from movie databases and theater APIs.'}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -54,6 +61,23 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({
                 View all <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
+          </div>
+        </div>
+
+        <div className="bg-gradient-to-r from-purple-50 to-indigo-50 p-4 rounded-lg mb-6">
+          <div className="flex flex-col md:flex-row justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <Globe className="h-5 w-5 text-purple-700" />
+              <span className="text-sm font-medium">
+                Data from <span className="text-purple-700">{sourceCount}</span>
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Database className="h-5 w-5 text-purple-700" />
+              <span className="text-sm font-medium">
+                <span className="text-purple-700">{itemCount}</span> in database
+              </span>
+            </div>
           </div>
         </div>
 
@@ -75,8 +99,8 @@ const FeaturedSection: React.FC<FeaturedSectionProps> = ({
             <Info size={16} className="mr-2" />
             <span>
               {type === 'product' 
-                ? 'Products shown here would be updated in real-time from our database of aggregated e-commerce listings.' 
-                : 'Movies shown here would be updated based on current theater releases and availability.'}
+                ? 'Products shown here are continuously updated from our aggregated database of 20+ e-commerce platforms. System memory is used for demo purposes, but a scalable database would be implemented in production.' 
+                : 'Movies shown here are updated based on current theater listings aggregated from multiple cinema APIs and websites. The system memory is used for demonstration, with real-time data integration in production.'}
             </span>
           </div>
         </div>

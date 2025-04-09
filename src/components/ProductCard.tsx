@@ -7,8 +7,10 @@ import {
   Tooltip, 
   TooltipContent, 
   TooltipProvider, 
-  TooltipTrigger 
+  TooltipTrigger,
+  TooltipProvider as Provider
 } from "@/components/ui/tooltip";
+import { Tag, ShoppingCart, TrendingUp } from 'lucide-react';
 
 export interface ProductCardProps {
   id: string;
@@ -38,9 +40,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
   // Sort sources by price (lowest first)
   const sortedSources = [...sources].sort((a, b) => a.price - b.price);
   
+  // Calculate price difference percentage from highest to lowest
+  const highestPrice = Math.max(...sources.map(s => s.price));
+  const savingsPercentage = Math.round(((highestPrice - lowestPrice) / highestPrice) * 100);
+  
   return (
     <Link to={`/product/${id}`}>
-      <Card className="overflow-hidden transition-all hover:shadow-md">
+      <Card className="overflow-hidden transition-all hover:shadow-md h-full">
         <div className="aspect-square overflow-hidden relative">
           <img 
             src={image} 
@@ -50,11 +56,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div className="absolute top-2 right-2">
             <RatingCircle rating={rating} size="sm" />
           </div>
+          
           {sortedSources.length > 1 && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
-              <span className="text-white text-xs font-medium">
-                Available at {sortedSources.length} stores
-              </span>
+              <div className="flex justify-between items-center">
+                <span className="text-white text-xs font-medium">
+                  <ShoppingCart className="h-3 w-3 inline mr-1" />
+                  {sortedSources.length} stores
+                </span>
+                {savingsPercentage > 0 && (
+                  <span className="bg-green-600 text-white text-xs px-2 py-1 rounded-full flex items-center">
+                    <TrendingUp className="h-3 w-3 mr-1" />
+                    Save {savingsPercentage}%
+                  </span>
+                )}
+              </div>
             </div>
           )}
         </div>
@@ -69,22 +85,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </div>
           </div>
           <div className="mt-2 flex gap-1 flex-wrap">
-            <TooltipProvider>
+            <Provider>
               {sortedSources.slice(0, 3).map((source) => (
                 <Tooltip key={source.name}>
                   <TooltipTrigger asChild>
-                    <img 
-                      src={source.logo} 
-                      alt={source.name} 
-                      className="w-6 h-6 object-contain" 
-                    />
+                    <div className="relative">
+                      <img 
+                        src={source.logo} 
+                        alt={source.name} 
+                        className="w-6 h-6 object-contain" 
+                      />
+                      {source.price === lowestPrice && (
+                        <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border border-white" />
+                      )}
+                    </div>
                   </TooltipTrigger>
                   <TooltipContent side="bottom">
-                    <p>{source.name}: {currency}{source.price.toFixed(2)}</p>
+                    <p className="flex items-center gap-1">
+                      {source.name}: 
+                      <span className={source.price === lowestPrice ? "text-green-600 font-bold" : ""}>
+                        {currency}{source.price.toFixed(2)}
+                      </span>
+                      {source.price === lowestPrice && <Tag className="h-3 w-3 text-green-600" />}
+                    </p>
                   </TooltipContent>
                 </Tooltip>
               ))}
-            </TooltipProvider>
+            </Provider>
             {sortedSources.length > 3 && (
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -95,8 +122,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
                 <TooltipContent>
                   <div className="space-y-1">
                     {sortedSources.slice(3).map((source) => (
-                      <p key={source.name} className="text-xs">
-                        {source.name}: {currency}{source.price.toFixed(2)}
+                      <p key={source.name} className="text-xs flex items-center gap-1">
+                        {source.name}: 
+                        <span className={source.price === lowestPrice ? "text-green-600 font-bold" : ""}>
+                          {currency}{source.price.toFixed(2)}
+                        </span>
+                        {source.price === lowestPrice && <Tag className="h-3 w-3 text-green-600" />}
                       </p>
                     ))}
                   </div>
