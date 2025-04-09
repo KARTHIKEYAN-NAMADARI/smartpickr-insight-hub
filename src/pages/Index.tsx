@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import FeaturedSection from '@/components/FeaturedSection';
 import CategorySection from '@/components/CategorySection';
@@ -7,6 +8,7 @@ import RatingCircle from '@/components/RatingCircle';
 import { Button } from '@/components/ui/button';
 import { Search } from 'lucide-react';
 import { featuredProducts, featuredMovies, productCategories, movieCategories } from '@/data/mockData';
+import AdCarousel from '@/components/AdCarousel';
 
 const Index = () => {
   return (
@@ -24,11 +26,11 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col sm:flex-row justify-center gap-4 max-w-md mx-auto">
-            <Button className="bg-white text-purple-800 hover:bg-gray-100">
-              Browse Products
+            <Button className="bg-white text-purple-800 hover:bg-gray-100" asChild>
+              <Link to="/category/all-products">Browse Products</Link>
             </Button>
-            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-purple-800">
-              Explore Movies
+            <Button variant="outline" className="border-white text-white hover:bg-white hover:text-purple-800" asChild>
+              <Link to="/category/movies">Explore Movies</Link>
             </Button>
           </div>
           
@@ -45,12 +47,24 @@ const Index = () => {
         </div>
       </section>
       
+      {/* Best Offers Carousel */}
+      <AdCarousel />
+      
       {/* Featured Products Section */}
       <FeaturedSection 
         title="Top Products" 
         subtitle="Highest-rated products across all categories"
         viewAllLink="/category/all-products"
         items={featuredProducts}
+        type="product"
+      />
+      
+      {/* Best Sellers Section */}
+      <FeaturedSection 
+        title="Best Sellers" 
+        subtitle="Most popular products with highest sales"
+        viewAllLink="/category/best-sellers"
+        items={featuredProducts.slice(0, 5)}
         type="product"
       />
       
@@ -137,20 +151,21 @@ const Index = () => {
             <div>
               <h4 className="font-semibold mb-4">Products</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white">Electronics</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Home Appliances</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Fashion</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Beauty</a></li>
+                <li><Link to="/category/electronics" className="text-gray-300 hover:text-white">Electronics</Link></li>
+                <li><Link to="/category/home-appliances" className="text-gray-300 hover:text-white">Home Appliances</Link></li>
+                <li><Link to="/category/fashion" className="text-gray-300 hover:text-white">Fashion</Link></li>
+                <li><Link to="/category/beauty" className="text-gray-300 hover:text-white">Beauty</Link></li>
+                <li><Link to="/category/best-sellers" className="text-gray-300 hover:text-white">Best Sellers</Link></li>
               </ul>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Movies</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="text-gray-300 hover:text-white">Action</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Comedy</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Drama</a></li>
-                <li><a href="#" className="text-gray-300 hover:text-white">Sci-Fi</a></li>
+                <li><Link to="/category/action" className="text-gray-300 hover:text-white">Action</Link></li>
+                <li><Link to="/category/comedy" className="text-gray-300 hover:text-white">Comedy</Link></li>
+                <li><Link to="/category/drama" className="text-gray-300 hover:text-white">Drama</Link></li>
+                <li><Link to="/category/sci-fi" className="text-gray-300 hover:text-white">Sci-Fi</Link></li>
               </ul>
             </div>
             
