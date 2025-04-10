@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { ScraperService } from '@/utils/ScraperService';
-import ProductCard, { ProductCardProps } from '@/components/ProductCard';
+import ProductCard from '@/components/ProductCard';
 import ScraperControls, { ScraperOptions } from '@/components/ScraperControls';
 import { useToast } from '@/hooks/use-toast';
 import { Package, RefreshCw, Clock, Search } from 'lucide-react';
@@ -14,8 +14,8 @@ import { Package, RefreshCw, Clock, Search } from 'lucide-react';
 const QuickCommercePage = () => {
   const { category } = useParams<{ category?: string }>();
   const { toast } = useToast();
-  const [products, setProducts] = useState<ProductCardProps[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<ProductCardProps[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedTab, setSelectedTab] = useState<string>(category || 'all');
@@ -176,8 +176,15 @@ const QuickCommercePage = () => {
                       {filteredProducts.map((product) => (
                         <ProductCard
                           key={product.id}
-                          {...product}
-                          className="bg-white border rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                          id={product.id}
+                          name={product.name}
+                          image={product.image}
+                          rating={product.rating}
+                          reviewCount={product.reviewCount}
+                          lowestPrice={product.lowestPrice}
+                          currency={product.currency}
+                          sources={product.sources}
+                          isLoading={false}
                           showDeliveryTime={true}
                         />
                       ))}
