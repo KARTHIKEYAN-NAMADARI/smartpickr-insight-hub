@@ -6,7 +6,7 @@ import FeaturedSection from '@/components/FeaturedSection';
 import CategorySection from '@/components/CategorySection';
 import RatingCircle from '@/components/RatingCircle';
 import { Button } from '@/components/ui/button';
-import { Search } from 'lucide-react';
+import { Search, Utensils } from 'lucide-react';
 import { featuredProducts, featuredMovies, productCategories, movieCategories } from '@/data/mockData';
 import AdCarousel from '@/components/AdCarousel';
 
@@ -58,6 +58,43 @@ const Index = () => {
         items={featuredProducts}
         type="product"
       />
+      
+      {/* Food Category Section - New */}
+      <section className="py-8 bg-amber-50">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold flex items-center">
+                <Utensils className="h-6 w-6 mr-2 text-amber-600" />
+                Food Delivery Comparison
+              </h2>
+              <p className="text-muted-foreground">Compare restaurant food prices across delivery platforms</p>
+            </div>
+            <Button asChild variant="default" className="bg-amber-600 hover:bg-amber-700">
+              <Link to="/food">
+                Explore Food
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {['Indian', 'Italian', 'American', 'Chinese'].map((cuisine) => (
+              <Link 
+                key={cuisine} 
+                to={`/food/${cuisine.toLowerCase()}`}
+                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 text-center"
+              >
+                <h3 className="font-semibold text-lg mb-1">{cuisine}</h3>
+                <p className="text-sm text-gray-500">Compare prices from multiple delivery apps</p>
+              </Link>
+            ))}
+          </div>
+          
+          <div className="mt-6 text-sm text-center text-amber-700">
+            Compare food prices from Swiggy, Zomato, UberEats, DoorDash, and more!
+          </div>
+        </div>
+      </section>
       
       {/* Best Sellers Section */}
       <FeaturedSection 
@@ -145,7 +182,7 @@ const Index = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
               <h3 className="text-xl font-bold mb-4">SmartPickr</h3>
-              <p className="text-gray-300">Your trusted source for product and movie reviews, comparisons, and real-time prices.</p>
+              <p className="text-gray-300">Your trusted source for product, food, and movie reviews, comparisons, and real-time prices.</p>
             </div>
             
             <div>
@@ -160,12 +197,13 @@ const Index = () => {
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Movies</h4>
+              <h4 className="font-semibold mb-4">Entertainment</h4>
               <ul className="space-y-2">
-                <li><Link to="/category/action" className="text-gray-300 hover:text-white">Action</Link></li>
-                <li><Link to="/category/comedy" className="text-gray-300 hover:text-white">Comedy</Link></li>
-                <li><Link to="/category/drama" className="text-gray-300 hover:text-white">Drama</Link></li>
-                <li><Link to="/category/sci-fi" className="text-gray-300 hover:text-white">Sci-Fi</Link></li>
+                <li><Link to="/food" className="text-gray-300 hover:text-white">Food Delivery</Link></li>
+                <li><Link to="/category/action" className="text-gray-300 hover:text-white">Action Movies</Link></li>
+                <li><Link to="/category/comedy" className="text-gray-300 hover:text-white">Comedy Movies</Link></li>
+                <li><Link to="/category/drama" className="text-gray-300 hover:text-white">Drama Movies</Link></li>
+                <li><Link to="/category/sci-fi" className="text-gray-300 hover:text-white">Sci-Fi Movies</Link></li>
               </ul>
             </div>
             

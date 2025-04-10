@@ -28,6 +28,18 @@ export class ScraperService {
     { name: 'AliExpress', url: 'https://www.aliexpress.com', logo: '/placeholder.svg' },
     { name: 'Myntra', url: 'https://www.myntra.com', logo: '/placeholder.svg' },
   ];
+  
+  // List of supported food delivery platforms
+  static foodDeliveryPlatforms = [
+    { name: 'Swiggy', url: 'https://www.swiggy.com', logo: '/placeholder.svg' },
+    { name: 'Zomato', url: 'https://www.zomato.com', logo: '/placeholder.svg' },
+    { name: 'UberEats', url: 'https://www.ubereats.com', logo: '/placeholder.svg' },
+    { name: 'DoorDash', url: 'https://www.doordash.com', logo: '/placeholder.svg' },
+    { name: 'GrubHub', url: 'https://www.grubhub.com', logo: '/placeholder.svg' },
+    { name: 'Deliveroo', url: 'https://www.deliveroo.com', logo: '/placeholder.svg' },
+    { name: 'Foodpanda', url: 'https://www.foodpanda.com', logo: '/placeholder.svg' },
+    { name: 'Just Eat', url: 'https://www.just-eat.com', logo: '/placeholder.svg' },
+  ];
 
   static async scrapeProducts(category: string): Promise<ScraperResponse> {
     try {
@@ -46,18 +58,27 @@ export class ScraperService {
       // Generate 15-30 random products
       const productCount = 15 + Math.floor(Math.random() * 15);
       
+      // Check if it's a food category
+      const isFood = category.toLowerCase() === 'food' || category.toLowerCase().includes('food');
+      
+      // Use food delivery platforms for food category, otherwise use e-commerce sites
+      const sourcePlatforms = isFood ? this.foodDeliveryPlatforms : this.supportedSites;
+      
       for (let i = 0; i < productCount; i++) {
         // Generate between 3 and 6 sources for each product
         const sourceCount = 3 + Math.floor(Math.random() * 4);
         const sources = [];
         
-        // Generate a base price between $50 and $1000
-        const basePrice = 50 + Math.floor(Math.random() * 950);
+        // Generate a base price between $50 and $1000 for regular products
+        // For food, generate a price between $5 and $50
+        const basePrice = isFood 
+          ? 5 + Math.floor(Math.random() * 45) 
+          : 50 + Math.floor(Math.random() * 950);
         
         // Add random sources with varying prices
         for (let j = 0; j < sourceCount; j++) {
-          const siteIndex = Math.floor(Math.random() * this.supportedSites.length);
-          const site = this.supportedSites[siteIndex];
+          const siteIndex = Math.floor(Math.random() * sourcePlatforms.length);
+          const site = sourcePlatforms[siteIndex];
           
           // Create price variations (±15% from base price)
           const priceFactor = 0.85 + (Math.random() * 0.3);
@@ -74,9 +95,35 @@ export class ScraperService {
         const sortedSources = [...sources].sort((a, b) => a.price - b.price);
         const lowestPrice = sortedSources[0].price;
         
+        // Generate product names based on category
+        let productName = '';
+        if (isFood) {
+          const foodItems = [
+            'Chicken Biryani', 'Margherita Pizza', 'Hamburger', 'Caesar Salad', 
+            'Sushi Platter', 'Butter Chicken', 'Pasta Carbonara', 'Pad Thai',
+            'Burrito Bowl', 'Fish & Chips', 'Ramen Noodles', 'Falafel Wrap',
+            'Vegetable Curry', 'Steak Dinner', 'Chow Mein', 'Grilled Sandwich',
+            'Seafood Paella', 'Beef Tacos', 'Mushroom Risotto', 'BBQ Ribs'
+          ];
+          const restaurants = [
+            'Spice Palace', 'Italiano\'s', 'Burger Joint', 'Green Leaf', 
+            'Tokyo Bites', 'Tandoor House', 'Pasta Paradise', 'Thai Express',
+            'Mexican Grill', 'Sea Breeze', 'Noodle Bar', 'Mediterranean Delight',
+            'Curry House', 'Steakhouse', 'Dragon Wok', 'Sandwich Co.',
+            'Spanish Flavors', 'Taqueria', 'Italian Kitchen', 'Smokehouse'
+          ];
+          
+          const foodIndex = i % foodItems.length;
+          const restaurantIndex = i % restaurants.length;
+          
+          productName = `${foodItems[foodIndex]} from ${restaurants[restaurantIndex]}`;
+        } else {
+          productName = `${category.charAt(0).toUpperCase() + category.slice(1)} Product ${i + 1}`;
+        }
+        
         products.push({
           id: `product-${category}-${i}`,
-          name: `${category.charAt(0).toUpperCase() + category.slice(1)} Product ${i + 1}`,
+          name: productName,
           image: `/placeholder.svg`,
           rating: 3 + Math.random() * 2,
           reviewCount: 10 + Math.floor(Math.random() * 990),
@@ -96,6 +143,13 @@ export class ScraperService {
         error: error instanceof Error ? error.message : 'Failed to scrape products'
       };
     }
+  }
+  
+  static async scrapeFoodItems(cuisine?: string): Promise<ScraperResponse> {
+    // This is essentially an alias for scrapeProducts, but with a category of 'food'
+    // If cuisine is provided, we'll use that as a subcategory (e.g., 'food-italian')
+    const category = cuisine ? `food-${cuisine.toLowerCase()}` : 'food';
+    return this.scrapeProducts(category);
   }
   
   static async scrapeProductDetails(productId: string): Promise<ScraperResponse> {
