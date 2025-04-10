@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
   TooltipProvider as Provider
 } from "@/components/ui/tooltip";
-import { Tag, ShoppingCart, TrendingUp, BarChart3 } from 'lucide-react';
+import { Tag, ShoppingCart, TrendingUp, BarChart3, RefreshCw } from 'lucide-react';
 
 export interface ProductCardProps {
   id: string;
@@ -25,6 +25,7 @@ export interface ProductCardProps {
     price: number;
     logo: string;
   }[];
+  isLoading?: boolean;
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
@@ -36,6 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   lowestPrice,
   currency = "$",
   sources,
+  isLoading = false,
 }) => {
   // Sort sources by price (lowest first)
   const sortedSources = [...sources].sort((a, b) => a.price - b.price);
@@ -50,7 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   
   return (
     <Link to={`/product/${id}`}>
-      <Card className="overflow-hidden transition-all hover:shadow-md h-full">
+      <Card className={`overflow-hidden transition-all hover:shadow-md h-full ${isLoading ? 'animate-pulse' : ''}`}>
         <div className="aspect-square overflow-hidden relative">
           <img 
             src={image} 
@@ -60,6 +62,13 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <div className="absolute top-2 right-2">
             <RatingCircle rating={rating} size="sm" />
           </div>
+          
+          {isLoading && (
+            <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+              <RefreshCw className="h-8 w-8 text-white animate-spin" />
+              <span className="sr-only">Loading...</span>
+            </div>
+          )}
           
           {sortedSources.length > 1 && (
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
