@@ -10,7 +10,7 @@ import {
   TooltipTrigger,
   TooltipProvider as Provider
 } from "@/components/ui/tooltip";
-import { Tag, ShoppingCart, TrendingUp } from 'lucide-react';
+import { Tag, ShoppingCart, TrendingUp, BarChart3 } from 'lucide-react';
 
 export interface ProductCardProps {
   id: string;
@@ -44,6 +44,10 @@ const ProductCard: React.FC<ProductCardProps> = ({
   const highestPrice = Math.max(...sources.map(s => s.price));
   const savingsPercentage = Math.round(((highestPrice - lowestPrice) / highestPrice) * 100);
   
+  // Get price history data (this would come from API in production)
+  const hasPriceHistory = true;
+  const isPriceDropping = Math.random() > 0.5;
+  
   return (
     <Link to={`/product/${id}`}>
       <Card className="overflow-hidden transition-all hover:shadow-md h-full">
@@ -71,6 +75,27 @@ const ProductCard: React.FC<ProductCardProps> = ({
                   </span>
                 )}
               </div>
+            </div>
+          )}
+          
+          {hasPriceHistory && (
+            <div className="absolute top-2 left-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className={`${isPriceDropping ? 'bg-green-600' : 'bg-orange-500'} text-white p-1 rounded-full`}>
+                      <BarChart3 className="h-3 w-3" />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p className="text-xs">
+                      {isPriceDropping 
+                        ? 'Price trend: Dropping (good time to buy)' 
+                        : 'Price trend: Rising (consider waiting)'}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             </div>
           )}
         </div>
