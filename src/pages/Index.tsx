@@ -1,12 +1,10 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import FeaturedSection from '@/components/FeaturedSection';
 import CategorySection from '@/components/CategorySection';
-import RatingCircle from '@/components/RatingCircle';
 import { Button } from '@/components/ui/button';
-import { Search, Utensils } from 'lucide-react';
+import { Search, Utensils, Package, Clock } from 'lucide-react';
 import { featuredProducts, featuredMovies, productCategories, movieCategories } from '@/data/mockData';
 import AdCarousel from '@/components/AdCarousel';
 
@@ -59,7 +57,7 @@ const Index = () => {
         type="product"
       />
       
-      {/* Food Category Section - New */}
+      {/* Food Category Section */}
       <section className="py-8 bg-amber-50">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center mb-6">
@@ -92,6 +90,43 @@ const Index = () => {
           
           <div className="mt-6 text-sm text-center text-amber-700">
             Compare food prices from Swiggy, Zomato, UberEats, DoorDash, and more!
+          </div>
+        </div>
+      </section>
+      
+      {/* Quick Commerce Section */}
+      <section className="py-8 bg-emerald-50">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-2xl font-bold flex items-center">
+                <Clock className="h-6 w-6 mr-2 text-emerald-600" />
+                Quick Commerce Comparison
+              </h2>
+              <p className="text-muted-foreground">Compare prices from Instamart, Zepto, Blinkit and more</p>
+            </div>
+            <Button asChild variant="default" className="bg-emerald-600 hover:bg-emerald-700">
+              <Link to="/quickcommerce">
+                Explore Quick Commerce
+              </Link>
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {['Groceries', 'Fresh Vegetables', 'Dairy', 'Household'].map((category) => (
+              <Link 
+                key={category} 
+                to={`/quickcommerce/${category.toLowerCase()}`}
+                className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 text-center"
+              >
+                <h3 className="font-semibold text-lg mb-1">{category}</h3>
+                <p className="text-sm text-gray-500">Compare prices across quick delivery apps</p>
+              </Link>
+            ))}
+          </div>
+          
+          <div className="mt-6 text-sm text-center text-emerald-700">
+            Get the best deals with delivery in as fast as 10 minutes!
           </div>
         </div>
       </section>
@@ -200,10 +235,10 @@ const Index = () => {
               <h4 className="font-semibold mb-4">Entertainment</h4>
               <ul className="space-y-2">
                 <li><Link to="/food" className="text-gray-300 hover:text-white">Food Delivery</Link></li>
+                <li><Link to="/quickcommerce" className="text-gray-300 hover:text-white">Quick Commerce</Link></li>
                 <li><Link to="/category/action" className="text-gray-300 hover:text-white">Action Movies</Link></li>
                 <li><Link to="/category/comedy" className="text-gray-300 hover:text-white">Comedy Movies</Link></li>
                 <li><Link to="/category/drama" className="text-gray-300 hover:text-white">Drama Movies</Link></li>
-                <li><Link to="/category/sci-fi" className="text-gray-300 hover:text-white">Sci-Fi Movies</Link></li>
               </ul>
             </div>
             

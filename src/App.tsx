@@ -9,6 +9,7 @@ import ProductDetail from "./pages/ProductDetail";
 import MovieDetail from "./pages/MovieDetail";
 import CategoryPage from "./pages/CategoryPage";
 import FoodCategoryPage from "./pages/FoodCategoryPage";
+import QuickCommercePage from "./pages/QuickCommercePage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,8 @@ const App = () => (
           <Route path="/category/:id" element={<CategoryPage />} />
           <Route path="/food" element={<FoodCategoryPage />} />
           <Route path="/food/:cuisine" element={<FoodCategoryPage />} />
+          <Route path="/quickcommerce" element={<QuickCommercePage />} />
+          <Route path="/quickcommerce/:category" element={<QuickCommercePage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
